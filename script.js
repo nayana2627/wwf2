@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const backgroundImages = [
         'backgrounds/IMG_9193.PNG',
