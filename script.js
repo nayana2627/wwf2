@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             targetPosition: 0,
             previousPosition: 0,
             currentPanel: 1,
-            totalPanels: 6,
+            totalPanels: 4,
             viewportWidth: window.innerWidth,
             maxPosition: elements.background.scrollWidth - window.innerWidth,
             isZoomed: false
@@ -64,23 +64,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function updateWalk() {
+            
             if (Math.abs(currentState.targetPosition - currentState.position) > 0.5) {
                 currentState.position += (currentState.targetPosition - currentState.position) * 0.1;
             }
             enforceBoundaries();
 
             const room1Start = backgroundImages[0].width;
-            const actualMax = elements.background.scrollWidth - window.innerWidth;
-            
-            elements.walker.style.opacity = currentState.position >= room1Start ? 1 : 0;
+            const animationStartPoint = room1Start - 1200; // Where character first appears
 
-            if (currentState.position >= room1Start && currentState.position < actualMax) {
-                const direction = currentState.position - currentState.previousPosition;
-                const frameSet = direction >= 0 ? walkingFrames : revWalkingFrames;
-                const progress = ((currentState.position - room1Start) / (actualMax - room1Start)) || 0;
-                currentState.frame = Math.floor(progress * 9 * 20) % 20;
-                elements.walker.src = frameSet[currentState.frame];
-            }
+            const actualMax = elements.background.scrollWidth - window.innerWidth;
+
+            elements.walker.style.opacity = currentState.position >= animationStartPoint ? 1 : 0;
+
+            // if (currentState.position >= room1Start && currentState.position < actualMax) {
+                if (currentState.position >= animationStartPoint && currentState.position < actualMax) {
+                    const direction = currentState.position - currentState.previousPosition;
+                    const frameSet = direction >= 0 ? walkingFrames : revWalkingFrames;
+                    
+                    // FIXED PROGRESS CALCULATION
+                    const progress = (currentState.position - animationStartPoint) / (actualMax - animationStartPoint);
+                    
+                    // FIXED FRAME INDEX CALCULATION
+                    currentState.frame = Math.floor(progress * 19* 20) % 20; // Direct frame mapping
+                    
+                    elements.walker.src = frameSet[currentState.frame];
+                }
 
             elements.background.style.transform = `translateX(-${currentState.position}px)`;
             currentState.previousPosition = currentState.position;
@@ -101,15 +110,20 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             this.classList.toggle('zoomed');
             currentState.isZoomed = !currentState.isZoomed;
-            if (!currentState.isZoomed) showPanel(1);
+            // if (!currentState.isZoomed) showPanel(1);
+            if (currentState.isZoomed) {
+                showPanel(1); // Always open first panel when clicked
+            } else {
+                showPanel(0); // Reset when closing
+            }
         }, { capture: true });
 
         function showPanel(panelNumber) {
             currentState.currentPanel = panelNumber;
-            elements.modalImage.src = `assets/${panelNumber}.png`;
+            elements.modalImage.src = `assets/texts/${panelNumber}.png`;
             elements.modal.classList.toggle('visible', panelNumber > 0);
             elements.modalPrev.style.display = panelNumber > 1 ? 'block' : 'none';
-            elements.modalNext.style.display = panelNumber < currentState.totalPanels ? 'block' : 'none';
+            elements.modalNext.style.display = panelNumber < 4 ? 'block' : 'none';
         }
 
         elements.modalNext.addEventListener('click', (e) => {
