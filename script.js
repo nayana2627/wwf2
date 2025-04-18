@@ -53,6 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `rev-walking-frame/fwalkcycle${i.toString().padStart(2, '0')}.png`
         );
 
+        const allFrames = walkingFrames.concat(revWalkingFrames);
+allFrames.forEach(src => {
+    const img = new Image();
+    img.src = src;
+});
+
         function enforceBoundaries() {
             const actualMax = elements.background.scrollWidth - window.innerWidth;
             currentState.position = Math.max(0, Math.min(currentState.position, actualMax));
@@ -86,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const progress = (currentState.position - animationStartPoint) / (actualMax - animationStartPoint);
                     
                     // FIXED FRAME INDEX CALCULATION
-                    currentState.frame = Math.floor(progress * 19* 20) % 20; // Direct frame mapping
+                    currentState.frame = Math.floor(progress * 30 * 20) % 20; // Direct frame mapping
                     
                     elements.walker.src = frameSet[currentState.frame];
                 }
