@@ -4,7 +4,8 @@
     box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
     height: 100%;
     overflow: hidden;
     overflow-x: hidden;
@@ -27,7 +28,6 @@ body, html {
     pointer-events: none;
 }
 
-/* Specific styling only for the first background image */
 .first-background {
     min-width: 100vw !important;
     width: 100vw !important;
@@ -47,15 +47,30 @@ body, html {
 }
 
 .hotspot {
-    position: absolute;
+    position: fixed;
     width: 100px;
     height: 100px;
     cursor: pointer;
     z-index: 20;
     transition: all 0.3s ease;
     border-radius: 50%;
-    
+    transform-origin: center;
 }
+
+/* Desktop hotspot positions */
+.hotspot-dust { top: 50%; left: 23%; }
+.hotspot-web { top: 17%; left: 30.5%; }
+.hotspot-fish { top: 18%; left: 45%; }
+.hotspot-bread { top: 18%; left: 41.5%; }
+.hotspot-carrot { top: 18%; left: 55%; }
+.hotspot-bee { top: 25%; left: 71%; }
+.hotspot-leaf { top: 33%; left: 73.5%; }
+.hotspot-lizard { top: 7%; left: 91.5%; }
+.hotspot-egg { top: 18%; left: 57%; }
+.hotspot-hair { top: 25%; left: 87.5%; }
+.hotspot-wood { top: 25%; left: 83%; }
+.hotspot-cube { top: 33%; left: 76%; }
+.hotspot-cockroach { top: 55%; left: 62%; }
 
 .hotspot.active {
     animation: pulse 2s infinite;
@@ -74,14 +89,13 @@ body, html {
     object-fit: contain;
     border-radius: 50%;
 }
-/* Add these rules */
 
 #modal {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1000;
+    z-index: 999;
     display: none;
     width: 800px;
     height: 600px;
@@ -108,7 +122,7 @@ body, html {
 .modal-btn {
     position: absolute;
     cursor: pointer;
-    z-index: 1001;
+    z-index: 1003;
     pointer-events: all;
 }
 
@@ -128,6 +142,73 @@ body, html {
     width: 60px;
     bottom: 135px;
     right: 65px;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    #walker {
+        width: 1000px !important;
+        bottom: -10px !important;
+        left: -250px;
+    }
+
+    .first-background {
+        margin-left: -40px !important; 
+    }
+
+    .hotspot {
+        width: 100px;
+        height: 100px;
+        position: fixed;
+    }
+
+    /* Mobile hotspot positions - same as desktop but with !important */
+    .hotspot-dust { top: 50% !important; left: 16% !important; }
+    .hotspot-web { top: 17% !important; left: 24.5% !important; }
+    .hotspot-fish { top: 20% !important; left: 40% !important; }
+    .hotspot-bread { top: 20% !important; left: 36.2% !important; }
+    .hotspot-carrot { top: 23% !important; left: 51% !important; }
+    .hotspot-bee { top: 28% !important; left: 68.5% !important; }
+    .hotspot-leaf { top: 35% !important; left: 71.5% !important; }
+    .hotspot-lizard { top: 7% !important; left: 91% !important; }
+    .hotspot-egg { top: 23% !important; left: 53.5% !important; }
+    .hotspot-hair { top: 31% !important; left: 86.5% !important; }
+    .hotspot-wood { top: 25% !important; left: 82% !important; }
+    .hotspot-cube { top: 35% !important; left: 74.5% !important; }
+    .hotspot-cockroach { top: 55% !important; left: 59% !important; }
+
+
+    #modal {
+        width: 95%;
+        height: auto;
+        max-height: 80vh;
+    }
+
+    #modal-close {
+        width: 35px; 
+        top: 48px;   
+        right: 48px;
+    }
+
+    #modal-prev {
+        width: 50px;  
+        bottom: 52px; 
+        left: 48px;
+    }
+
+    #modal-next {
+        width: 50px;  
+        bottom: 52px; 
+        right: 48px;
+    }
+
+    .hotspot.active {
+        transform: scale(1.3);
+    }
+
+    .hotspot.zoomed {
+        transform: scale(2.0);
+    }
 }
 
 @keyframes pulse {
