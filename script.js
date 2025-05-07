@@ -80,11 +80,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateWalk () {
       enforceBoundaries()
 
-      if (Math.abs(currentState.targetPosition - currentState.position) > 0.5) {
-        currentState.position +=
-          (currentState.targetPosition - currentState.position) * 0.1
-      }
+      // if (Math.abs(currentState.targetPosition - currentState.position) > 0.5) {
+      //   currentState.position +=
+      //     (currentState.targetPosition - currentState.position) * 0.1
+      // }
 
+      if (!elements.modal.classList.contains('visible')) {
+        if (Math.abs(currentState.targetPosition - currentState.position) > 0.5) {
+          currentState.position += (currentState.targetPosition - currentState.position) * 0.1
+        }
+      }
+      
       const room1Start = backgroundImages[0].width
       const animationStartPoint = room1Start - 1200
 
@@ -139,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener(
       'wheel',
       e => {
-        if (!e.target.closest('#hotspot')) {
+        if (!e.target.closest('#hotspot') && !elements.modal.classList.contains('visible')) {
           e.preventDefault()
           currentState.targetPosition += e.deltaY * 2
           enforceBoundaries()
@@ -147,13 +153,13 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       { passive: false }
     )
-
+    
     let touchY = 0
     window.addEventListener('touchstart', e => (touchY = e.touches[0].clientY))
     window.addEventListener(
       'touchmove',
       e => {
-        if (!e.target.closest('#hotspot')) {
+        if (!e.target.closest('#hotspot') && !elements.modal.classList.contains('visible')) {
           e.preventDefault()
           const delta = e.touches[0].clientY - touchY
           currentState.targetPosition += delta * 2
@@ -164,13 +170,41 @@ document.addEventListener('DOMContentLoaded', () => {
       { passive: false }
     )
 
+    // window.addEventListener(
+    //   'wheel',
+    //   e => {
+    //     if (!e.target.closest('#hotspot')) {
+    //       e.preventDefault()
+    //       currentState.targetPosition += e.deltaY * 2
+    //       enforceBoundaries()
+    //     }
+    //   },
+    //   { passive: false }
+    // )
+
+    // let touchY = 0
+    // window.addEventListener('touchstart', e => (touchY = e.touches[0].clientY))
+    // window.addEventListener(
+    //   'touchmove',
+    //   e => {
+    //     if (!e.target.closest('#hotspot')) {
+    //       e.preventDefault()
+    //       const delta = e.touches[0].clientY - touchY
+    //       currentState.targetPosition += delta * 2
+    //       enforceBoundaries()
+    //       touchY = e.touches[0].clientY
+    //     }
+    //   },
+    //   { passive: false }
+    // )
+
     // Keep the modal functions unchanged
     function showPanel (panelNumber) {
       currentState.currentPanel = panelNumber
       elements.modalImage.src = `assets/texts/${panelNumber}.png`
       elements.modal.classList.toggle('visible', panelNumber > 0)
       elements.modalPrev.style.display = panelNumber > 1 ? 'block' : 'none'
-      elements.modalNext.style.display = panelNumber < 4 ? 'block' : 'none'
+      elements.modalNext.style.display = panelNumber < 3 ? 'block' : 'none'
     }
 
     elements.modalNext.addEventListener('click', e => {

@@ -114,20 +114,20 @@ body, html {
 
 #modal-close {
     width: 30px;
-    top: 100px;
-    right: 220px;
+    top: 135px;
+    right: 65px;
 }
 
 #modal-prev {
     width: 60px;
-    bottom: 110px;
-    left: 200px;
+    bottom: 135px;
+    left: 65px;
 }
 
 #modal-next {
     width: 60px;
-    bottom: 110px;
-    right: 240px;
+    bottom: 135px;
+    right: 65px;
 }
 
 @keyframes pulse {
