@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const ANIMATION_END_OFFSET = 500
-  const loadingScreen = document.getElementById('loading-screen');
-  const loadingImage = document.getElementById('loading-image');
-  
+ 
   const backgroundImages = [
     {
       src:
@@ -31,39 +29,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   let loadedImages = 0
-
-
-  function updateLoadingProgress() {
-    const progress = Math.floor((loadedImages / backgroundImages.length) * 100);
-    const stateIndex = Math.floor(progress / 25);
-    loadingImage.src = `assets/loading/loading-${stateIndex * 25}.png`;
-
-    if (loadedImages === backgroundImages.length) {
-        setTimeout(() => {
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-                initializeSystem();
-            }, 500);
-        }, 1000);
-    }
-}
-
   let currentState = null
-  let isMobile = window.innerWidth <= 768 // Check if device is mobile
+  // let isMobile = window.innerWidth <= 768 // Check if device is mobile
 
   backgroundImages.forEach((img, index) => {
     const image = new Image()
     image.onload = () => {
       if (index === 0) image.classList.add('first-background')
       image.style.width = `${img.width}px`
-      loadedImages++;
-      updateLoadingProgress(); // Update loading progress
-      elements.background.appendChild(image);
+      loadedImages++
       if (loadedImages === backgroundImages.length) initializeSystem()
     }
     image.src = img.src
-    // elements.background.appendChild(image)
+    elements.background.appendChild(image)
   })
 
   function initializeSystem () {
@@ -128,25 +106,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const room1Start = backgroundImages[0].width
 
-      // Adjust animation start point based on device
-      let animationStartPoint
-      if (currentState.isMobile) {
-        animationStartPoint = room1Start - 600 // Less offset for mobile
-      } else {
-        animationStartPoint = room1Start - 1200 // Original offset for desktop
-      }
+      const animationStartPoint = currentState.isMobile ? room1Start - 600 : room1Start - 1200
 
-      // Debug - log values to help troubleshoot
-      console.log('Current position:', currentState.position)
-      console.log('Animation start point:', animationStartPoint)
-      console.log('Is mobile:', currentState.isMobile)
-      console.log('Modal open:', currentState.modalOpen)
+      // Adjust animation start point based on device
+      // let animationStartPoint
+      // if (currentState.isMobile) {
+      //   animationStartPoint = room1Start - 600 // Less offset for mobile
+      // } else {
+      //   animationStartPoint = room1Start - 1200 // Original offset for desktop
+      // }
+
 
       // Only show walker if modal is not open and we're past the start point
-      const shouldShowWalker =
-        currentState.position >= animationStartPoint && !currentState.modalOpen
-      console.log('Should show walker:', shouldShowWalker)
+      const shouldShowWalker = currentState.position >= animationStartPoint && !currentState.modalOpen
 
+      
       elements.walker.style.opacity = shouldShowWalker ? '1' : '0'
 
       if (shouldShowWalker) {

@@ -124,7 +124,7 @@ html {
   transform: translate(-50%, -50%);
   z-index: 999;
   display: none;
-  width: 800px;
+  width: 1000px;
   height: 600px;
   background: 0 0;
 }
@@ -149,19 +149,19 @@ html {
   pointer-events: all;
 }
 #modal-close {
-  width: 30px;
-  top: 135px;
-  right: 65px;
+  width: 40px;
+  top: 90px;
+  right: 75px;
 }
 #modal-prev {
   width: 350px;
-  bottom: 60px;
-  left: -60px;
+  bottom: 20px;
+  left: -40px;
 }
 #modal-next {
   width: 350px;
-  bottom: 60px;
-  right: -90px;
+  bottom: 20px;
+  right: -75px;
 }
 @media (max-width: 768px) {
   #walker {
@@ -275,38 +275,3 @@ html {
   }
 }
 
-#loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 1;
-    transition: opacity 0.5s ease;
-}
-
-.loading-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: transparent;
-}
-
-#loading-image {
-    position: absolute;
-    max-width: 300px;
-    width: auto;
-    height: auto;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10000;
-}
