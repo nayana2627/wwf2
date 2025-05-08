@@ -1,23 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const ANIMATION_END_OFFSET = 500 
-  // const backgroundImages = [
-  //   { src: 'backgrounds/page1.png', width: 1920 },
-  //   { src: 'backgrounds/room1.PNG', width: 5836 },
-  //   { src: 'backgrounds/room2.PNG', width: 10147 },
-  //   { src: 'backgrounds/room3.PNG', width: 6158 },
-  //   { src: 'backgrounds/room4.PNG', width: 8706 }
-  // ]
-
+  const ANIMATION_END_OFFSET = 500
+  const loadingScreen = document.getElementById('loading-screen');
+  const loadingImage = document.getElementById('loading-image');
+  
   const backgroundImages = [
-    { 
-        src: window.innerWidth <= 768 ? 'backgrounds/page1-mobile.png' : 'backgrounds/page1.png',
-        width: window.innerWidth <= 768 ? 1080 : 1920
+    {
+      src:
+        window.innerWidth <= 768
+          ? 'backgrounds/page1-mobile.png'
+          : 'backgrounds/page1.png',
+      width: window.innerWidth <= 768 ? 1080 : 1920
     },
     { src: 'backgrounds/room1.PNG', width: 5836 },
     { src: 'backgrounds/room2.PNG', width: 10147 },
     { src: 'backgrounds/room3.PNG', width: 6158 },
     { src: 'backgrounds/room4.PNG', width: 8706 }
-];
+  ]
 
   const elements = {
     background: document.getElementById('background'),
@@ -27,10 +25,30 @@ document.addEventListener('DOMContentLoaded', () => {
     modalImage: document.getElementById('modal-image'),
     modalClose: document.getElementById('modal-close'),
     modalPrev: document.getElementById('modal-prev'),
-    modalNext: document.getElementById('modal-next')
+    modalNext: document.getElementById('modal-next'),
+    loadingScreen: document.getElementById('loading-screen'),
+    loadingImage: document.getElementById('loading-image')
   }
 
   let loadedImages = 0
+
+
+  function updateLoadingProgress() {
+    const progress = Math.floor((loadedImages / backgroundImages.length) * 100);
+    const stateIndex = Math.floor(progress / 25);
+    loadingImage.src = `assets/loading/loading-${stateIndex * 25}.png`;
+
+    if (loadedImages === backgroundImages.length) {
+        setTimeout(() => {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                initializeSystem();
+            }, 500);
+        }, 1000);
+    }
+}
+
   let currentState = null
   let isMobile = window.innerWidth <= 768 // Check if device is mobile
 
@@ -39,11 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
     image.onload = () => {
       if (index === 0) image.classList.add('first-background')
       image.style.width = `${img.width}px`
-      loadedImages++
+      loadedImages++;
+      updateLoadingProgress(); // Update loading progress
+      elements.background.appendChild(image);
       if (loadedImages === backgroundImages.length) initializeSystem()
     }
     image.src = img.src
-    elements.background.appendChild(image)
+    // elements.background.appendChild(image)
   })
 
   function initializeSystem () {
@@ -64,8 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Adjust walker size for mobile
     if (currentState.isMobile) {
-      elements.walker.style.width = '400px'; // Smaller on mobile
-      elements.walker.style.bottom = '-10px'; // Different position on mobile
+      elements.walker.style.width = '400px' // Smaller on mobile
+      elements.walker.style.bottom = '-10px' // Different position on mobile
     }
 
     const walkingFrames = Array.from(
@@ -102,30 +122,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Always update position regardless of modal state
       if (Math.abs(currentState.targetPosition - currentState.position) > 0.5) {
-        currentState.position += (currentState.targetPosition - currentState.position) * 0.1
+        currentState.position +=
+          (currentState.targetPosition - currentState.position) * 0.1
       }
 
       const room1Start = backgroundImages[0].width
-      
+
       // Adjust animation start point based on device
-      let animationStartPoint;
+      let animationStartPoint
       if (currentState.isMobile) {
-        animationStartPoint = room1Start - 600; // Less offset for mobile
+        animationStartPoint = room1Start - 600 // Less offset for mobile
       } else {
-        animationStartPoint = room1Start - 1200; // Original offset for desktop
+        animationStartPoint = room1Start - 1200 // Original offset for desktop
       }
 
       // Debug - log values to help troubleshoot
-      console.log('Current position:', currentState.position);
-      console.log('Animation start point:', animationStartPoint);
-      console.log('Is mobile:', currentState.isMobile);
-      console.log('Modal open:', currentState.modalOpen);
+      console.log('Current position:', currentState.position)
+      console.log('Animation start point:', animationStartPoint)
+      console.log('Is mobile:', currentState.isMobile)
+      console.log('Modal open:', currentState.modalOpen)
 
       // Only show walker if modal is not open and we're past the start point
-      const shouldShowWalker = currentState.position >= animationStartPoint && !currentState.modalOpen;
-      console.log('Should show walker:', shouldShowWalker);
-      
-      elements.walker.style.opacity = shouldShowWalker ? '1' : '0';
+      const shouldShowWalker =
+        currentState.position >= animationStartPoint && !currentState.modalOpen
+      console.log('Should show walker:', shouldShowWalker)
+
+      elements.walker.style.opacity = shouldShowWalker ? '1' : '0'
 
       if (shouldShowWalker) {
         // Calculate intended direction based on TARGET movement
@@ -153,17 +175,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('resize', () => {
       currentState.viewportWidth = window.innerWidth
-      currentState.isMobile = window.innerWidth <= 768;
-      
+      currentState.isMobile = window.innerWidth <= 768
+
       // Adjust walker size on resize
       if (currentState.isMobile) {
-        elements.walker.style.width = '400px';
-        elements.walker.style.bottom = '-10px';
+        elements.walker.style.width = '400px'
+        elements.walker.style.bottom = '-10px'
       } else {
-        elements.walker.style.width = '1000px';
-        elements.walker.style.bottom = '-20px';
+        elements.walker.style.width = '1000px'
+        elements.walker.style.bottom = '-20px'
       }
-      
+
       enforceBoundaries()
       elements.background.style.transform = `translateX(-${currentState.position}px)`
     })
@@ -184,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
     )
 
     // Adjust scroll sensitivity for mobile
-    const scrollSensitivity = currentState.isMobile ? 1 : 2;
+    const scrollSensitivity = currentState.isMobile ? 1 : 2
 
     window.addEventListener(
       'wheel',
@@ -197,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       { passive: false }
     )
-    
+
     let touchY = 0
     window.addEventListener('touchstart', e => (touchY = e.touches[0].clientY))
     window.addEventListener(
@@ -206,7 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!e.target.closest('#hotspot')) {
           e.preventDefault()
           const delta = e.touches[0].clientY - touchY
-          currentState.targetPosition += delta * (currentState.isMobile ? 2.5 : 2) // More sensitive on mobile
+          currentState.targetPosition +=
+            delta * (currentState.isMobile ? 2.5 : 2) // More sensitive on mobile
           enforceBoundaries()
           touchY = e.touches[0].clientY
         }
@@ -214,18 +237,18 @@ document.addEventListener('DOMContentLoaded', () => {
       { passive: false }
     )
 
-    function showPanel(panelNumber) {
-      currentState.currentPanel = panelNumber;
+    function showPanel (panelNumber) {
+      currentState.currentPanel = panelNumber
       // Use mobile or desktop images based on screen width
-      const folder = window.innerWidth <= 768 ? 'mobile' : 'desktop';
-      elements.modalImage.src = `assets/texts/${folder}/${panelNumber}.png`;
-      elements.modal.classList.toggle('visible', panelNumber > 0);
+      const folder = window.innerWidth <= 768 ? 'mobile' : 'desktop'
+      elements.modalImage.src = `assets/texts/${folder}/${panelNumber}.png`
+      elements.modal.classList.toggle('visible', panelNumber > 0)
 
-      currentState.modalOpen = panelNumber > 0;
-      
-      elements.modalPrev.style.display = panelNumber > 1 ? 'block' : 'none';
-      elements.modalNext.style.display = panelNumber < 3 ? 'block' : 'none';
-  }
+      currentState.modalOpen = panelNumber > 0
+
+      elements.modalPrev.style.display = panelNumber > 1 ? 'block' : 'none'
+      elements.modalNext.style.display = panelNumber < 3 ? 'block' : 'none'
+    }
 
     elements.modalNext.addEventListener('click', e => {
       e.preventDefault()
@@ -244,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.hotspot.classList.remove('zoomed')
       currentState.isZoomed = false
       elements.modal.classList.remove('visible')
-      currentState.modalOpen = false  // Update modal state when closing
+      currentState.modalOpen = false // Update modal state when closing
     })
 
     requestAnimationFrame(updateWalk)

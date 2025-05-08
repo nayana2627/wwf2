@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Edu-Animate</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+    <div id="loading-screen">
+        <div class="loading-container">
+            <img id="loading-image" src="assets/loading/loading-0.png" alt="Loading..." >
+        </div>
+    </div>
     <div id="background">
         <div class="hotspot active hotspot-dust">
             <img src="assets/callouts/IMG_dust.PNG" alt="Decorative Circle">
         </div>
-        
+
         <!-- Decorative Hotspots -->
         <div class="hotspot active hotspot-web">
             <img src="assets/callouts/IMG_web.PNG" alt="Decorative Circle">
@@ -29,7 +36,7 @@
             <img src="assets/callouts/IMG_bee.PNG" alt="Decorative Circle">
         </div>
         <div class="hotspot active hotspot-leaf">
-            <img src="assets/callouts/IMG_leaf.PNG" >
+            <img src="assets/callouts/IMG_leaf.PNG">
         </div>
         <div class="hotspot active hotspot-lizard">
             <img src="assets/callouts/IMG_lizard.PNG">
@@ -52,7 +59,7 @@
     </div>
 
     <img id="walker" src="walking-frames/Layer_00.png" alt="Walking Character">
-    
+
     <div id="modal" class="hidden">
         <div id="modal-content">
             <img id="modal-image" src="" alt="Info Panel">
@@ -64,4 +71,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
