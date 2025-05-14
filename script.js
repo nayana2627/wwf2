@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const ANIMATION_END_OFFSET = 500;
+  const ANIMATION_END_OFFSET = 0;
 
   // Preload loading images
   const loadingImagesSrc = [
@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Define elements
   const elements = {
     background: document.getElementById('background'),
+    flowersOverlay: document.getElementById('flowers-overlay'),
     walker: document.getElementById('walker'),
     hotspot: document.getElementById('hotspot'),
     modal: document.getElementById('modal'),
@@ -25,7 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     modalPrev: document.getElementById('modal-prev'),
     modalNext: document.getElementById('modal-next'),
     loadingScreen: document.getElementById('loading-screen'),
-    loadingImage: document.getElementById('loading-image')
+    loadingImage: document.getElementById('loading-image'),
+    calloutsContainer: document.getElementById('callouts-container')
   };
 
   // Set initial loading image
@@ -37,11 +39,17 @@ document.addEventListener('DOMContentLoaded', () => {
       src: window.innerWidth <= 768 ? 'backgrounds/page1-mobile.png' : 'backgrounds/page1.png',
       width: window.innerWidth <= 768 ? 1080 : 1920
     },
-    { src: 'backgrounds/room1.PNG', width: 5836 },
-    { src: 'backgrounds/room2.PNG', width: 10147 },
-    { src: 'backgrounds/room3.PNG', width: 6158 },
-    { src: 'backgrounds/room4.PNG', width: 8706 }
+    { 
+      src: 'backgrounds/room-strip.PNG', 
+      width: 12362 
+    }
   ];
+  
+  // Add the flowers overlay image that will appear above the walker
+  const flowersImage = {
+    src: 'backgrounds/flowers-overlay.PNG', // Update with your actual filename
+    width: 12362 // Same width as your room background
+  };
 
   const walkingFrames = Array.from(
     { length: 20 },
@@ -54,7 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const allWalkerFrames = [...walkingFrames, ...revWalkingFrames];
   const hotspotImages = document.querySelectorAll('.hotspot img');
 
-  const totalImagesToLoad = backgroundImages.length + allWalkerFrames.length + hotspotImages.length; // 5 + 40 + 13 = 58
+  // Include flowers overlay in the total images to load
+  const totalImagesToLoad = backgroundImages.length + 1 + allWalkerFrames.length + hotspotImages.length; 
   let loadedImages = 0;
 
   // Function to update loading screen
@@ -74,18 +83,18 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       loadingSrc = 'assets/loading/loading-100.png';
 
+       // Update the fade out sequence
+    setTimeout(() => {
+      elements.loadingScreen.style.opacity = '0';
       setTimeout(() => {
+        elements.loadingScreen.style.display = 'none';
         document.body.classList.remove('loading');
-        elements.loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            elements.loadingScreen.style.display = 'none';
-            initializeSystem();
-        }, 500);
+        initializeSystem();
+      }, 500);
     }, 500);
-}
-elements.loadingImage.src = loadingSrc;
-
-}
+  }
+    elements.loadingImage.src = loadingSrc;
+  }
 
   // Track hotspot images
   hotspotImages.forEach(img => {
@@ -116,20 +125,59 @@ elements.loadingImage.src = loadingSrc;
   });
 
   // Load backgrounds and track
-  backgroundImages.forEach((imgData, index) => {
-    const img = new Image();
-    img.onload = () => {
-      if (index === 0) img.classList.add('first-background');
+  // backgroundImages.forEach((imgData, index) => {
+  //   const img = new Image();
+  //   img.onload = () => {
+  //     if (index === 0) img.classList.add('first-background');
+      
+  //     img.style.width = `${imgData.width}px`;
+  //     loadedImages++;
+  //     updateLoading();
+  //   };
+  //   img.src = imgData.src;
+  //   elements.background.appendChild(img);
+  //   if (img.complete) {
+  //     img.onload();
+  //   }
+  // });
+
+  // Update the background image loading part
+backgroundImages.forEach((imgData, index) => {
+  const img = new Image();
+  img.onload = () => {
+    if (index === 0) {
+      img.classList.add('first-background');
+      // Immediately append and show first background
+      elements.background.appendChild(img);
       img.style.width = `${imgData.width}px`;
-      loadedImages++;
-      updateLoading();
-    };
-    img.src = imgData.src;
-    elements.background.appendChild(img);
-    if (img.complete) {
-      img.onload();
     }
-  });
+    loadedImages++;
+    updateLoading();
+    
+    // Only append other images after loading completes
+    if (index > 0) {
+      elements.background.appendChild(img);
+      img.style.width = `${imgData.width}px`;
+    }``
+  };
+  img.src = imgData.src;
+  if (img.complete && index === 0) {
+    img.onload();
+  }
+});
+
+  // Load flowers overlay
+  const flowersImg = new Image();
+  flowersImg.onload = () => {
+    flowersImg.style.width = `${flowersImage.width}px`;
+    loadedImages++;
+    updateLoading();
+  };
+  flowersImg.src = flowersImage.src;
+  elements.flowersOverlay.appendChild(flowersImg);
+  if (flowersImg.complete) {
+    flowersImg.onload();
+  }
 
   // Initialize system
   function initializeSystem() {
@@ -145,7 +193,8 @@ elements.loadingImage.src = loadingSrc;
       isZoomed: false,
       animationEndOffset: ANIMATION_END_OFFSET,
       modalOpen: false,
-      isMobile: window.innerWidth <= 768
+      isMobile: window.innerWidth <= 768,
+      firstImageWidth: backgroundImages[0].width
     };
 
     // Adjust walker size for mobile
@@ -153,6 +202,21 @@ elements.loadingImage.src = loadingSrc;
       elements.walker.style.width = '400px';
       elements.walker.style.bottom = '-10px';
     }
+
+const positionCalloutsOnStrip = () => {
+  // Only handle basic initialization
+  document.querySelectorAll('.hotspot').forEach(hotspot => {
+    hotspot.classList.add('active');
+  });
+};
+
+    
+    // Position callouts on the room strip
+    positionCalloutsOnStrip();
+    
+    // Fix flowers overlay to start at room-strip position
+    const flowersOverlayImg = elements.flowersOverlay.querySelector('img');
+    flowersOverlayImg.style.marginLeft = `${currentState.firstImageWidth}px`;
 
     function enforceBoundaries() {
       const actualMax = elements.background.scrollWidth - window.innerWidth;
@@ -177,8 +241,8 @@ elements.loadingImage.src = loadingSrc;
           (currentState.targetPosition - currentState.position) * 0.1;
       }
 
-      const room1Start = backgroundImages[0].width;
-      const animationStartPoint = currentState.isMobile ? room1Start - 600 : room1Start - 1200;
+      const room1Start = currentState.firstImageWidth;
+      const animationStartPoint = currentState.isMobile ? room1Start -600 : room1Start - 1200;
 
       const shouldShowWalker = currentState.position >= animationStartPoint && !currentState.modalOpen;
 
@@ -198,7 +262,13 @@ elements.loadingImage.src = loadingSrc;
         elements.walker.src = frameSet[currentState.frame];
       }
 
+      // Move both background and flowers overlay together
       elements.background.style.transform = `translateX(-${currentState.position}px)`;
+      elements.flowersOverlay.querySelector('img').style.transform = `translateX(-${currentState.position}px)`;
+      
+      // Move callouts container in sync with background
+      elements.calloutsContainer.style.transform = `translateX(-${currentState.position}px)`;
+      
       currentState.previousPosition = currentState.position;
       requestAnimationFrame(updateWalk);
     }
@@ -206,6 +276,14 @@ elements.loadingImage.src = loadingSrc;
     window.addEventListener('resize', () => {
       currentState.viewportWidth = window.innerWidth;
       currentState.isMobile = window.innerWidth <= 768;
+      const firstBackgroundImg = document.querySelector('.first-background');
+  currentState.firstPageWidth = firstBackgroundImg 
+    ? firstBackgroundImg.offsetWidth 
+    : (currentState.isMobile ? 1080 : 1920);
+
+  // Update flowers overlay margin
+  flowersImg.style.marginLeft = `${currentState.firstPageWidth}px`;
+      currentState.firstImageWidth = window.innerWidth <= 768 ? 1080 : 1920;
 
       if (currentState.isMobile) {
         elements.walker.style.width = '400px';
@@ -215,8 +293,16 @@ elements.loadingImage.src = loadingSrc;
         elements.walker.style.bottom = '-20px';
       }
 
+      // Reposition callouts when window is resized
+      // positionCalloutsOnStrip();
+     
+      // flowersOverlayImg.style.marginLeft = `${currentState.firstImageWidth}px`;
+
       enforceBoundaries();
-      elements.background.style.transform = `translateX(-${currentState.position}px)`;
+     const translateX = `translateX(-${currentState.position}px)`;
+  elements.background.style.transform = translateX;
+  elements.flowersOverlay.style.transform = translateX;
+  elements.calloutsContainer.style.transform = translateX;
     });
 
     elements.hotspot.classList.add('active');

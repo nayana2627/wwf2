@@ -9,13 +9,32 @@ html {
   overflow: hidden;
   overflow-x: hidden;
 }
+body.loading {
+  overflow: hidden;
+}
 
 body.loading .hotspot,
 body.loading #walker,
 body.loading #modal {
   display: none;
 }
+body.loading {
+  overflow: hidden;
+}
 
+body.loading #walker,
+body.loading #flowers-overlay,
+body.loading #callouts-container,
+body.loading #modal,
+body.loading .hotspot {
+  opacity: 0;
+  visibility: hidden;
+}
+body.loading #background,
+body.loading .first-background {
+  opacity: 1;
+  visibility: visible;
+}
 #loading-screen {
     position: fixed;
     top: 0;
@@ -47,6 +66,7 @@ body.loading #modal {
   height: 100%;
   display: flex;
   transform: translateX(0);
+  z-index: 1;
 }
 #background img {
   width: auto !important;
@@ -71,8 +91,10 @@ body.loading #modal {
   opacity: 0;
   transition: opacity 0.5s ease;
 }
+
+/* Base hotspot styles */
 .hotspot {
-  position: fixed;
+  position: absolute;
   width: 100px;
   height: 100px;
   cursor: pointer;
@@ -81,73 +103,37 @@ body.loading #modal {
   border-radius: 50%;
   transform-origin: center;
 }
-.hotspot-dust {
-  top: 50%;
-  left: 23%;
-}
-.hotspot-web {
-  top: 17%;
-  left: 30.5%;
-}
-.hotspot-fish {
-  top: 18%;
-  left: 45%;
-}
-.hotspot-bread {
-  top: 18%;
-  left: 41.5%;
-}
-.hotspot-carrot {
-  top: 18%;
-  left: 55%;
-}
-.hotspot-bee {
-  top: 25%;
-  left: 71%;
-}
-.hotspot-leaf {
-  top: 33%;
-  left: 73.5%;
-}
-.hotspot-lizard {
-  top: 7%;
-  left: 91.5%;
-}
-.hotspot-egg {
-  top: 18%;
-  left: 57%;
-}
-.hotspot-hair {
-  top: 25%;
-  left: 87.5%;
-}
-.hotspot-wood {
-  top: 25%;
-  left: 83%;
-}
-.hotspot-cube {
-  top: 33%;
-  left: 76%;
-}
-.hotspot-cockroach {
-  top: 55%;
-  left: 62%;
-}
-.hotspot.active {
-  animation: pulse 2s infinite;
-}
-.hotspot.zoomed {
-  transform: scale(2);
-  z-index: 1002;
-  animation: none;
-  box-shadow: none;
-}
+
 .hotspot img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   border-radius: 50%;
 }
+
+.hotspot.active {
+  animation: pulse 2s infinite;
+}
+
+.hotspot.zoomed {
+  transform: scale(2);
+  z-index: 1002;
+  animation: none;
+}
+
+/* Desktop positions */
+.hotspot-bird { left: calc(1920px - 500px); top: 40%; }
+.hotspot-burr { left: calc(1920px + 2400px); top: 15%; }
+.hotspot-butterfly { left: calc(1920px + 2600px); top: 60%; }
+.hotspot-millipede { left: calc(1920px + 1800px); top: 20%; }
+.hotspot-moss { left: calc(1920px - 200px); top: 12%; }
+.hotspot-pollen { left: calc(1920px + 1900px); top: 60%; }
+.hotspot-pond { left: calc(1920px + 4200px); top: 20%; }
+.hotspot-sand { left: calc(1920px + 2760px); top: 12%; }
+.hotspot-slime { left: calc(1920px + 3400px); top: 12%; }
+.hotspot-slug { left: calc(1920px + 950px); top: 20%; }
+.hotspot-soil { left: calc(1920px + 400px); top: 20%; }
+
 #modal {
   position: fixed;
   top: 50%;
@@ -228,60 +214,26 @@ body.loading #modal {
   .hotspot {
     width: 100px;
     height: 100px;
-    position: fixed;
   }
-  .hotspot-dust {
-    top: 50% !important;
-    left: 16% !important;
+  
+  .hotspot img {
+    width: 100px;
+    height: 100px;
   }
-  .hotspot-web {
-    top: 17% !important;
-    left: 24.5% !important;
-  }
-  .hotspot-fish {
-    top: 20% !important;
-    left: 40% !important;
-  }
-  .hotspot-bread {
-    top: 20% !important;
-    left: 36.2% !important;
-  }
-  .hotspot-carrot {
-    top: 23% !important;
-    left: 51% !important;
-  }
-  .hotspot-bee {
-    top: 28% !important;
-    left: 68.5% !important;
-  }
-  .hotspot-leaf {
-    top: 35% !important;
-    left: 71.5% !important;
-  }
-  .hotspot-lizard {
-    top: 7% !important;
-    left: 91% !important;
-  }
-  .hotspot-egg {
-    top: 23% !important;
-    left: 53.5% !important;
-  }
-  .hotspot-hair {
-    top: 31% !important;
-    left: 86.5% !important;
-  }
-  .hotspot-wood {
-    top: 25% !important;
-    left: 82% !important;
-  }
-  .hotspot-cube {
-    top: 35% !important;
-    left: 74.5% !important;
-  }
-  .hotspot-cockroach {
-    top: 55% !important;
-    left: 59% !important;
-  }
+
+  /* Mobile positions */
+  .hotspot-bird { left: calc(1080px - 500px); }
+  .hotspot-burr { left: calc(1080px + 3000px); }
+  .hotspot-butterfly { left: calc(1080px + 3200px); }
+  .hotspot-millipede { left: calc(1080px + 2200px); }
+  .hotspot-moss { left: calc(1080px - 112.5px); }
+  .hotspot-pollen { left: calc(1080px + 2500px); }
+  .hotspot-pond { left: calc(1080px + 5100px); }
+  .hotspot-sand { left: calc(1080px + 3420px); }
+  .hotspot-slime { left: calc(1080px + 4200px); }
+  .hotspot-slug { left: calc(1080px + 1230px); }
+  .hotspot-soil { left: calc(1080px + 700px); }
+  
   #modal {
     width: 90% !important;
     height: auto;
@@ -312,6 +264,43 @@ body.loading #modal {
     transform: scale(2);
   }
 }
+
+#callouts-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 25; /* Above background but below flowers */
+  pointer-events: none; /* Let clicks pass through to the background */
+}
+
+#callouts-container .hotspot {
+  pointer-events: auto; /* Make hotspots clickable */
+}
+
+#flowers-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 15; 
+  pointer-events: none; /* Let clicks pass through */
+  display: flex;
+}
+
+#flowers-overlay img {
+position: relative;
+  width: auto;
+  top:0;
+  left: -650px;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+
 @keyframes pulse {
   0% {
     transform: scale(0.95);
@@ -323,4 +312,3 @@ body.loading #modal {
     transform: scale(0.95);
   }
 }
-
