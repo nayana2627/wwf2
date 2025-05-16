@@ -9,9 +9,6 @@ html {
   overflow: hidden;
   overflow-x: hidden;
 }
-body.loading {
-  overflow: hidden;
-}
 
 body.loading .hotspot,
 body.loading #walker,
@@ -95,8 +92,10 @@ body.loading .first-background {
 /* Base hotspot styles */
 .hotspot {
   position: absolute;
-  width: 100px;
-  height: 100px;
+    width: clamp(140px, 8vw, 200px);  /* Responsive but with min/max limits */
+  height: clamp(140px, 8vw, 200px);
+  /* width: 100px;
+  height: 100px; */
   cursor: pointer;
   z-index: 20;
   transition: all 0.3s ease;
@@ -122,17 +121,17 @@ body.loading .first-background {
 }
 
 /* Desktop positions */
-.hotspot-bird { left: calc(1920px - 500px); top: 40%; }
-.hotspot-burr { left: calc(1920px + 2400px); top: 15%; }
-.hotspot-butterfly { left: calc(1920px + 2600px); top: 60%; }
-.hotspot-millipede { left: calc(1920px + 1800px); top: 20%; }
-.hotspot-moss { left: calc(1920px - 200px); top: 12%; }
-.hotspot-pollen { left: calc(1920px + 1900px); top: 60%; }
-.hotspot-pond { left: calc(1920px + 4200px); top: 20%; }
-.hotspot-sand { left: calc(1920px + 2760px); top: 12%; }
-.hotspot-slime { left: calc(1920px + 3400px); top: 12%; }
-.hotspot-slug { left: calc(1920px + 950px); top: 20%; }
-.hotspot-soil { left: calc(1920px + 400px); top: 20%; }
+.hotspot-bird { left: calc(100vw + 100px); top: 40%; }
+.hotspot-burr { left: calc(100vw + 1000px); top: 15%; }
+.hotspot-butterfly { left: calc(100vw + 1500px); top: 60%; }
+.hotspot-millipede { left: calc(100vw + 2000px); top: 20%; }
+.hotspot-moss { left: calc(100vw + 2500px); top: 12%; }
+.hotspot-pollen { left: calc(100vw + 3000px); top: 60%; }
+.hotspot-pond { left: calc(100vw + 3500px); top: 20%; }
+.hotspot-sand { left: calc(100vw + 4000px); top: 12%; }
+.hotspot-slime { left: calc(100vw + 4500px); top: 12%; }
+.hotspot-slug { left: calc(100vw + 1600px); top: 15%; }
+.hotspot-soil { left: calc(100vw + 5500px); top: 20%; }
 
 #modal {
   position: fixed;
@@ -183,7 +182,7 @@ body.loading .first-background {
 
 #loading-image {
     position: absolute;
-    max-width: 300px;  /* Reduced from 300px */
+    max-width: 300px;
     width: auto;
     height: auto;
     top: 50%;
@@ -193,7 +192,7 @@ body.loading .first-background {
 
 @media (max-width: 768px) {
     #loading-image {
-        max-width: 150px;  /* Reduced from 200px */
+        max-width: 150px;
         top: 45%;
     }
 }
@@ -222,17 +221,17 @@ body.loading .first-background {
   }
 
   /* Mobile positions */
-  .hotspot-bird { left: calc(1080px - 500px); }
-  .hotspot-burr { left: calc(1080px + 3000px); }
-  .hotspot-butterfly { left: calc(1080px + 3200px); }
-  .hotspot-millipede { left: calc(1080px + 2200px); }
-  .hotspot-moss { left: calc(1080px - 112.5px); }
-  .hotspot-pollen { left: calc(1080px + 2500px); }
-  .hotspot-pond { left: calc(1080px + 5100px); }
-  .hotspot-sand { left: calc(1080px + 3420px); }
-  .hotspot-slime { left: calc(1080px + 4200px); }
-  .hotspot-slug { left: calc(1080px + 1230px); }
-  .hotspot-soil { left: calc(1080px + 700px); }
+  .hotspot-bird { left: calc(100vw + 180px); top: 40%; }
+  .hotspot-burr { left: calc(100vw + 600px); top: 15%; }
+  .hotspot-butterfly { left: calc(100vw + 900px); top: 60%; }
+  .hotspot-millipede { left: calc(100vw + 1200px); top: 20%; }
+  .hotspot-moss { left: calc(100vw + 1500px); top: 12%; }
+  .hotspot-pollen { left: calc(100vw + 1800px); top: 60%; }
+  .hotspot-pond { left: calc(100vw + 2100px); top: 20%; }
+  .hotspot-sand { left: calc(100vw + 2400px); top: 12%; }
+  .hotspot-slime { left: calc(100vw + 2700px); top: 12%; }
+  .hotspot-slug { left: calc(100vw + 1900px); top: 18%; }
+  .hotspot-soil { left: calc(100vw + 3300px); top: 20%; }
   
   #modal {
     width: 90% !important;
@@ -271,12 +270,12 @@ body.loading .first-background {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 25; /* Above background but below flowers */
-  pointer-events: none; /* Let clicks pass through to the background */
+  z-index: 25;
+  pointer-events: none;
 }
 
 #callouts-container .hotspot {
-  pointer-events: auto; /* Make hotspots clickable */
+  pointer-events: auto;
 }
 
 #flowers-overlay {
@@ -285,21 +284,20 @@ body.loading .first-background {
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: 15; 
-  pointer-events: none; /* Let clicks pass through */
+  z-index: 15;
+  pointer-events: none;
   display: flex;
 }
 
 #flowers-overlay img {
-position: relative;
+  position: relative;
   width: auto;
-  top:0;
+  top: 0;
   left: -650px;
   height: 100%;
   object-fit: contain;
   display: block;
 }
-
 
 @keyframes pulse {
   0% {
