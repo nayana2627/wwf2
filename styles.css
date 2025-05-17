@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 body,
 html {
   height: 100%;
@@ -15,6 +16,7 @@ body.loading #walker,
 body.loading #modal {
   display: none;
 }
+
 body.loading {
   overflow: hidden;
 }
@@ -26,34 +28,34 @@ body.loading #modal,
 body.loading .hotspot {
   opacity: 0;
   visibility: hidden;
+  /* Added transition delay for visibility to prevent flicker */
+  transition: opacity 0.5s ease, visibility 0s 0.5s;
 }
+
 body.loading #background,
 body.loading .first-background {
   opacity: 1;
   visibility: visible;
 }
+
 #loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.5s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease;
 }
 
 #loading-image {
-    position: absolute;
-    max-width: 200px;
-    width: auto;
-    height: auto;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  max-width: 25vw; /* Responsive loading image size based on viewport width */
+  width: auto;
+  height: auto;
 }
 
 #background {
@@ -64,43 +66,44 @@ body.loading .first-background {
   display: flex;
   transform: translateX(0);
   z-index: 1;
+  width: auto; /* Width will be set dynamically by JS based on image widths */
 }
+
 #background img {
-  width: auto !important;
   height: 100%;
-  object-fit: contain;
+  object-fit: contain; /* Ensure images maintain aspect ratio */
   display: block;
   pointer-events: none;
 }
+
 .first-background {
-  min-width: 100vw !important;
-  width: 100vw !important;
-  object-fit: cover !important;
+  width: 100vw !important; /* First background image takes full viewport width */
+  object-fit: cover !important; /* Cover the entire viewport */
 }
+
 #walker {
   position: fixed;
-  bottom: -20px;
-  left: 100px;
-  width: 1000px;
+  bottom: -2vh; /* Adjust bottom position with viewport height */
+  left: 5vw; /* Adjust initial left position with viewport width */
   height: auto;
   z-index: 10;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease;
+  width: 1200px; /* Limit maximum width of the walker */
 }
 
-/* Base hotspot styles */
 .hotspot {
   position: absolute;
-    width: clamp(140px, 8vw, 200px);  /* Responsive but with min/max limits */
-  height: clamp(140px, 8vw, 200px);
-  /* width: 100px;
-  height: 100px; */
+  /* Clamp ensures a responsive size between 80px, 10vw, and 150px */
+  width: clamp(80px, 10vw, 150px);
+  height: clamp(80px, 10vw, 150px);
   cursor: pointer;
   z-index: 20;
   transition: all 0.3s ease;
   border-radius: 50%;
   transform-origin: center;
+  pointer-events: auto; /* Ensure hotspots are interactive */
 }
 
 .hotspot img {
@@ -108,6 +111,7 @@ body.loading .first-background {
   height: 100%;
   object-fit: contain;
   border-radius: 50%;
+  pointer-events: none; /* Prevent interaction with the image inside the hotspot */
 }
 
 .hotspot.active {
@@ -115,23 +119,34 @@ body.loading .first-background {
 }
 
 .hotspot.zoomed {
-  transform: scale(2);
+  transform: scale(1.8); /* Slightly reduced zoom for better mobile view */
   z-index: 1002;
   animation: none;
 }
 
-/* Desktop positions */
-.hotspot-bird { left: calc(100vw + 100px); top: 40%; }
-.hotspot-burr { left: calc(100vw + 1000px); top: 15%; }
-.hotspot-butterfly { left: calc(100vw + 1500px); top: 60%; }
-.hotspot-millipede { left: calc(100vw + 2000px); top: 20%; }
-.hotspot-moss { left: calc(100vw + 2500px); top: 12%; }
-.hotspot-pollen { left: calc(100vw + 3000px); top: 60%; }
-.hotspot-pond { left: calc(100vw + 3500px); top: 20%; }
-.hotspot-sand { left: calc(100vw + 4000px); top: 12%; }
-.hotspot-slime { left: calc(100vw + 4500px); top: 12%; }
-.hotspot-slug { left: calc(100vw + 1600px); top: 15%; }
-.hotspot-soil { left: calc(100vw + 5500px); top: 20%; }
+/* Callouts container */
+#callouts-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 25;
+  width: auto; /* Width will be set dynamically by JS based on image widths */
+}
+
+/* Default hotspot positions - these will be dynamically adjusted by JS */
+/* They serve as a fallback but are primarily controlled by script.js now */
+.hotspot-bird { left: 10%; top: 30%; }
+.hotspot-burr { left: 25%; top: 10%; }
+.hotspot-butterfly { left: 40%; top: 50%; }
+.hotspot-millipede { left: 30%; top: 15%; }
+.hotspot-moss { left: 35%; top: 8%; }
+.hotspot-pollen { left: 45%; top: 55%; }
+.hotspot-pond { left: 50%; top: 18%; }
+.hotspot-sand { left: 55%; top: 10%; }
+.hotspot-slime { left: 60%; top: 10%; }
+.hotspot-slug { left: 28%; top: 12%; }
+.hotspot-soil { left: 65%; top: 15%; }
 
 #modal {
   position: fixed;
@@ -140,142 +155,74 @@ body.loading .first-background {
   transform: translate(-50%, -50%);
   z-index: 999;
   display: none;
-  width: 1000px;
-  height: 600px;
-  background: 0 0;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for modal overlay */
+  width: 80%; /* Responsive width */
+  max-width: 900px; /* Maximum width */
+  height: auto;
+  max-height: 90vh; /* Limit maximum height to prevent overflow on small screens */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Add shadow for better visibility */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Hide overflow if content is too large */
 }
+
 #modal.visible {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 #modal-content {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: auto;
+  max-height: 90vh;
+  background-color: white; /* Modal content background */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
 #modal-image {
-  width: 100%;
-  height: 100%;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 70vh; /* Limit image height within modal to allow space for buttons */
   object-fit: contain;
-  pointer-events: none;
+  margin: 0 auto; /* Center the image */
 }
+
 .modal-btn {
   position: absolute;
   cursor: pointer;
   z-index: 1003;
   pointer-events: all;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 10px;
 }
+
 #modal-close {
-  width: 40px;
-  top: 90px;
-  right: 75px;
+  width: 30px;
+  top: 10px;
+  right: 10px;
 }
+
 #modal-prev {
-  width: 350px;
-  bottom: 20px;
-  left: -40px;
+  width: 80px;
+  bottom: 10px;
+  left: 10px;
 }
+
 #modal-next {
-  width: 350px;
-  bottom: 20px;
-  right: -75px;
-}
-
-#loading-image {
-    position: absolute;
-    max-width: 300px;
-    width: auto;
-    height: auto;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-@media (max-width: 768px) {
-    #loading-image {
-        max-width: 150px;
-        top: 45%;
-    }
-}
-
-@media (max-width: 768px) {
-  #walker {
-    width: 1000px !important;
-    bottom: -10px !important;
-    left: -250px;
-  }
-  .first-background {
-    margin-left: -40px !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    object-fit: cover !important;
-    object-position: center !important;
-  }
-  .hotspot {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .hotspot img {
-    width: 100px;
-    height: 100px;
-  }
-
-  /* Mobile positions */
-  .hotspot-bird { left: calc(100vw + 180px); top: 40%; }
-  .hotspot-burr { left: calc(100vw + 600px); top: 15%; }
-  .hotspot-butterfly { left: calc(100vw + 900px); top: 60%; }
-  .hotspot-millipede { left: calc(100vw + 1200px); top: 20%; }
-  .hotspot-moss { left: calc(100vw + 1500px); top: 12%; }
-  .hotspot-pollen { left: calc(100vw + 1800px); top: 60%; }
-  .hotspot-pond { left: calc(100vw + 2100px); top: 20%; }
-  .hotspot-sand { left: calc(100vw + 2400px); top: 12%; }
-  .hotspot-slime { left: calc(100vw + 2700px); top: 12%; }
-  .hotspot-slug { left: calc(100vw + 1900px); top: 18%; }
-  .hotspot-soil { left: calc(100vw + 3300px); top: 20%; }
-  
-  #modal {
-    width: 90% !important;
-    height: auto;
-    max-height: 80vh;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-  }
-  #modal-close {
-    width: 35px;
-    top: 48px;
-    right: 48px;
-  }
-  #modal-prev {
-    width: 270px;
-    bottom: 1px;
-    left: -40px;
-  }
-  #modal-next {
-    width: 270px;
-    bottom: 1px;
-    right: -65px;
-  }
-  .hotspot.active {
-    transform: scale(1.3);
-  }
-  .hotspot.zoomed {
-    transform: scale(2);
-  }
-}
-
-#callouts-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 25;
-  pointer-events: none;
-}
-
-#callouts-container .hotspot {
-  pointer-events: auto;
+  width: 80px;
+  bottom: 10px;
+  right: 10px;
 }
 
 #flowers-overlay {
@@ -283,30 +230,69 @@ body.loading .first-background {
   top: 0;
   left: 0;
   height: 100%;
-  width: 100%;
+  width: auto; /* Width will be set dynamically by JS */
   z-index: 15;
   pointer-events: none;
   display: flex;
+  transform: translateX(0); /* Ensure it moves with the background */
 }
 
 #flowers-overlay img {
-  position: relative;
   width: auto;
-  top: 0;
-  left: -650px;
   height: 100%;
   object-fit: contain;
   display: block;
+  margin-left: 0; /* Will be set by JS */
 }
 
 @keyframes pulse {
   0% {
     transform: scale(0.95);
   }
+
   50% {
-    transform: scale(1.3);
+    transform: scale(1.1); /* Slightly reduced pulse size for better appearance */
   }
+
   100% {
     transform: scale(0.95);
+  }
+}
+
+/* Media queries for smaller adjustments on very small screens if necessary */
+@media (max-width: 600px) {
+  #modal-prev,
+  #modal-next {
+    width: 60px; /* Smaller buttons on very small screens */
+  }
+}
+
+/* Desktop (larger screens) */
+@media (min-width: 769px) {
+  #walker {
+    width: 1400px; /* Much larger on desktop */
+    bottom: -4vh;
+    left: -10vw; /* Adjusted left position to center the larger walker */
+  }
+}
+
+/* Tablets and medium-sized phones */
+@media (max-width: 768px) {
+  #walker {
+    width: 1200px; /* Larger on tablets */
+    bottom: -3vh;
+    left: -30vw;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  #walker {
+    width: 1000px; /* Still quite large on small phones */
+    bottom: -2vh;
+    left: -40vw;
+  }
+    #loading-image {
+    max-width: 50vw; /* Largest on mobile */
   }
 }
