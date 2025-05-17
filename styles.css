@@ -93,11 +93,11 @@ body.loading .first-background {
   width: 1200px; /* Limit maximum width of the walker */
 }
 
+/* Base hotspot styles */
 .hotspot {
   position: absolute;
-  /* Clamp ensures a responsive size between 80px, 10vw, and 150px */
-  width: clamp(80px, 10vw, 150px);
-  height: clamp(80px, 10vw, 150px);
+  width: clamp(170px, 12vw, 200px); /* Increased base size */
+  height: clamp(170px, 12vw, 200px);
   cursor: pointer;
   z-index: 20;
   transition: all 0.3s ease;
@@ -122,6 +122,36 @@ body.loading .first-background {
   transform: scale(1.8); /* Slightly reduced zoom for better mobile view */
   z-index: 1002;
   animation: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .hotspot {
+    width: clamp(150px, 20vw, 200px); /* Larger size for mobile */
+    height: clamp(150px, 20vw, 200px);
+  }
+
+  .hotspot img {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Adjust animation scales for larger hotspots */
+  .hotspot.active {
+    transform: scale(1.1);
+  }
+
+  .hotspot.zoomed {
+    transform: scale(1.6);
+  }
+}
+
+/* Even smaller screens */
+@media (max-width: 480px) {
+  .hotspot {
+    width: clamp(150px, 25vw, 200px); /* Even larger relative size */
+    height: clamp(150px, 25vw, 200px);
+  }
 }
 
 /* Callouts container */
