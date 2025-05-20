@@ -185,12 +185,10 @@ body.loading .first-background {
   transform: translate(-50%, -50%);
   z-index: 999;
   display: none;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for modal overlay */
   width: 80%; /* Responsive width */
   max-width: 900px; /* Maximum width */
   height: auto;
   max-height: 90vh; /* Limit maximum height to prevent overflow on small screens */
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Add shadow for better visibility */
   border-radius: 8px; /* Rounded corners */
   overflow: hidden; /* Hide overflow if content is too large */
 }
@@ -206,10 +204,8 @@ body.loading .first-background {
   width: 100%;
   height: auto;
   max-height: 90vh;
-  background-color: white; /* Modal content background */
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -238,21 +234,21 @@ body.loading .first-background {
 }
 
 #modal-close {
-  width: 30px;
-  top: 10px;
-  right: 10px;
+  width: 60px;
+  top: 70px;
+  right: 75px;
 }
 
 #modal-prev {
-  width: 80px;
-  bottom: 10px;
-  left: 10px;
+  width: 350px;
+  bottom: 8px;
+  left: -40px;
 }
 
 #modal-next {
-  width: 80px;
-  bottom: 10px;
-  right: 10px;
+ width: 350px;
+  bottom: 8px;
+  right: -70px;
 }
 
 #flowers-overlay {
@@ -313,6 +309,29 @@ body.loading .first-background {
     bottom: -3vh;
     left: -30vw;
   }
+  #modal {
+    width: 90% !important;
+    height: auto;
+    max-height: 80vh;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  #modal-close {
+    width: 50px;
+    top: 48px;
+    right: 55px;
+  }
+  #modal-prev {
+    width: 270px;
+    bottom: 1px;
+    left: -34px;
+  }
+  #modal-next {
+    width: 270px;
+    bottom: 1px;
+    right: -54px;
+  }
 }
 
 /* Small phones */
@@ -324,5 +343,69 @@ body.loading .first-background {
   }
     #loading-image {
     max-width: 50vw; /* Largest on mobile */
+  }
+  #modal {
+    width: 90% !important;
+    height: auto;
+    max-height: 80vh;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  #modal-close {
+    width: 50px;
+    top: 48px;
+    right: 55px;
+  }
+  #modal-prev {
+    width: 270px;
+    bottom: 1px;
+    left: -34px;
+  }
+  #modal-next {
+    width: 270px;
+    bottom: 1px;
+    right: -54px;
+  }
+}
+
+/* Updated background link styling */
+.background-link {
+  position: absolute;
+  z-index: 30; /* Increased z-index above everything else (hotspots were at 20) */
+  pointer-events: auto;
+}
+
+.background-link a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  /* Debug styling - remove after positioning is confirmed */
+  /* background-color: rgba(255, 0, 0, 0.3); Semi-transparent red */
+}
+
+/* For debugging purposes only - remove after testing */
+
+
+/* Position for desktop */
+@media (min-width: 769px) {
+  .background-link {
+    /* Adjust these values to match your element position */
+    top: 91%; 
+    left: 47%;
+    width: 120px;
+    height: 30px;
+  }
+}
+
+/* Position for mobile */
+@media (max-width: 768px) {
+  .background-link {
+    /* Adjust these values for mobile */
+    top: 91%;
+    left: 44%;
+    width: 150px;
+    height: 50px;
   }
 }

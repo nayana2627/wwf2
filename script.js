@@ -24,7 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     loadingScreen: document.getElementById('loading-screen'),
     loadingImage: document.getElementById('loading-image'),
     calloutsContainer: document.getElementById('callouts-container'),
-    hotspots: document.querySelectorAll('.hotspot')
+    hotspots: document.querySelectorAll('.hotspot'),
+    backgroundLink: document.getElementById('background-link')
+
   }
 
   elements.loadingImage.src = 'assets/loading/loading-0.png'
@@ -105,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateLoading()
       }
       img.onerror = () => {
-        console.error('Failed to load hotspot image:', img.src)
+        // console.error('Failed to load hotspot image:', img.src)
         loadedImages++
         updateLoading()
       }
@@ -124,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateLoading()
       }
       img.onerror = () => {
-        console.error('Failed to load walker frame:', src)
+        // console.error('Failed to load walker frame:', src)
         loadedImages++
         updateLoading()
       }
@@ -142,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateLoading()
     }
     img.onerror = () => {
-      console.error('Failed to load background image:', imgData.src)
+      // console.error('Failed to load background image:', imgData.src)
       loadedImages++
       updateLoading()
     }
@@ -160,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateLoading()
   }
   flowersImg.onerror = () => {
-    console.error('Failed to load flowers overlay image:', flowersImage.src)
+    // console.error('Failed to load flowers overlay image:', flowersImage.src)
     loadedImages++
     updateLoading()
   }
@@ -186,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
       backgroundTotalWidth: 0, 
       hotspotData: {
       
-        bird: { x: 0.02, y: 0.4 }, // 5% of room-strip width, 40% of room-strip height
+        bird: { x: 0.02, y: 0.4 },
         burr: { x: 0.49, y: 0.05 },
         butterfly: { x: 0.56, y: 0.6 },
         millipede: { x: 0.41, y: 0.15 },
@@ -200,6 +202,30 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    function setupBackgroundLink() {
+  const backgroundLink = document.getElementById('background-link');
+  const backgroundLinkAnchor = backgroundLink ? backgroundLink.querySelector('a') : null;
+  
+  if (backgroundLink && backgroundLinkAnchor) {
+    // Ensure the link is clickable by preventing other event handlers from interfering
+    backgroundLinkAnchor.addEventListener('click', function(e) {
+      // Stop event propagation to prevent other handlers from canceling this
+      e.stopPropagation();
+      
+      // Log to console for debugging
+      // console.log('Background link clicked, navigating to:', this.href);
+      
+      // You can also force navigation this way if needed
+      // window.open(this.href, this.target);
+      
+      // Return true to allow default anchor behavior
+      return true;
+    });
+      //  console.log('Background link setup complete');
+  } else {
+    // console.error('Background link elements not found');
+  }
+}
     function updateLayoutDimensions () {
       const firstBackgroundImg =
         elements.background.querySelector('.first-background')
@@ -266,6 +292,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateLayoutDimensions()
     positionCalloutsDynamically()
+    setupBackgroundLink();
+
+    document.addEventListener('click', function(e) {
+  // Check if click was on or within the background link
+  const backgroundLink = document.getElementById('background-link');
+  if (backgroundLink && (e.target === backgroundLink || backgroundLink.contains(e.target))) {
+    // Allow the click on the link to work naturally
+    return true;
+  }
+});
 
     function enforceBoundaries () {
       const actualMaxScroll =
@@ -320,6 +356,10 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.calloutsContainer.style.transform = translateX
       elements.flowersOverlay.style.transform = translateX
 
+       if (elements.backgroundLink) {
+    elements.backgroundLink.style.transform = translateX
+  }
+
       currentState.previousPosition = currentState.position 
       requestAnimationFrame(updateWalk)
     }
@@ -333,6 +373,11 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.background.style.transform = translateX
       elements.flowersOverlay.style.transform = translateX
       elements.calloutsContainer.style.transform = translateX
+
+      if (elements.backgroundLink) {
+    elements.backgroundLink.style.transform = translateX
+  }
+
     })
 
     elements.hotspots.forEach(hotspot => {
