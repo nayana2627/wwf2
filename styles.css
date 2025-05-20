@@ -381,8 +381,9 @@ body.loading .first-background {
   width: 100%;
   height: 100%;
   cursor: pointer;
-  /* Debug styling - remove after positioning is confirmed */
-  /* background-color: rgba(255, 0, 0, 0.3); Semi-transparent red */
+   -webkit-tap-highlight-color: transparent; /* Remove mobile highlight */
+  -webkit-touch-callout: none; /* Remove iOS link preview */
+  user-select: none;
 }
 
 /* For debugging purposes only - remove after testing */
